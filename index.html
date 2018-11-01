@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>New Game</title>
+		<script src="pixi/pixi.min.js"></script>
+		
+	</head>
+	<body>
+		<script>
+
+			//Aliases
+			let Application = PIXI.Application,
+				Container = PIXI.Container,
+				loader = PIXI.loader,
+				resources = PIXI.loader.resources,
+				Graphics = PIXI.Graphics,
+				TextureCache = PIXI.utils.TextureCache,
+				Sprite = PIXI.Sprite,
+				Text = PIXI.Text,
+				TextStyle = PIXI.TextStyle;
+
+			//Create a Pixi Application
+			let app = new Application({ 
+				width: 512, 
+				height: 512,                       
+				antialiasing: true, 
+				transparent: false, 
+				resolution: 1
+			  }
+			);
+
+			//Add the canvas that Pixi automatically created for you to the HTML document
+			document.body.appendChild(app.view);
+
+			loader
+			  .add("stick.jpg")
+			  .add("brick.jpg")
+			  .load(setup);
+			  
+			  
+			  let character, bricks;
+			function setup()
+			{
+				gameScene = new Container();
+				app.stage.addChild(gameScene);
+				app.renderer.backgroundColor = 0x000000;
+				//Make the sprites and add them to the `gameScene`
+				//Create an alias for the texture atlas frame ids
+				character = new Sprite(resources["stick.jpg"].texture);
+				character.x = 60
+				character.y = 50
+				gameScene.addChild(character);
+				
+				bricks = new Sprite(resources["brick.jpg"].texture); 
+				bricks.position.set(200, 200);
+				gameScene.addChild(bricks);
+				
+				app.ticker.add(delta => gameLoop(delta));
+				
+				let left = keyboard(37),
+					up = keyboard(38),
+					right = keyboard(39),
+					down = keyboard(40);
+			}
+			
+			function gameLoop(delta)
+			{
+				//Move the cat 1 pixel 
+				character.x += 1;
+				
+				if (character.x > 520)
+				{
+					character.x = -200;
+				}
+			}
+		</script>
+	</body>  
+</html>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
