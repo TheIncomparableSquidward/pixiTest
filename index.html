@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<title>New Game</title>
-		<script src="pixi/pixi.min.js"></script>
+		<script src="../pixi/pixi.min.js"></script>
 		
 	</head>
 	<body>
@@ -19,15 +19,21 @@
 				Sprite = PIXI.Sprite,
 				Text = PIXI.Text,
 				TextStyle = PIXI.TextStyle;
+				poly = new PIXI.Polygon(new PIXI.Point(0, 0), new PIXI.Point(1200, 600), new PIXI.Point(600, 900));
+				playerPos = new PIXI.Point(0,0);
+				mousePos = new PIXI.Point(0,0);
+				//points = [new PIXI.point(0, 0), new PIXI.point(1200, 600), new PIXI.point(600, 900)]
+				//point = PIXI.point(0, 0);
 
 			//Create a Pixi Application
-			let app = new Application({ 
-				width: 512, 
-				height: 512,                       
+			let app = new Application(
+			{ 
+				width: 1650, 
+				height: 900,                       
 				antialiasing: true, 
 				transparent: false, 
 				resolution: 1
-			  }
+			}
 			);
 
 			//Add the canvas that Pixi automatically created for you to the HTML document
@@ -36,10 +42,11 @@
 			loader
 			  .add("stick.jpg")
 			  .add("brick.jpg")
+			  .add("beach.jpg")
 			  .load(setup);
 			  
 			  
-			  let character, bricks;
+			  let character, bricks, beach;
 			function setup()
 			{
 				gameScene = new Container();
@@ -47,32 +54,81 @@
 				app.renderer.backgroundColor = 0x000000;
 				//Make the sprites and add them to the `gameScene`
 				//Create an alias for the texture atlas frame ids
+				
+				beach = new Sprite(resources["beach.jpg"].texture);
+				beach.position.set(0, 0);
+				beach.width = 1650;
+				beach.height = 1000;
+				gameScene.addChild(beach);
+				
 				character = new Sprite(resources["stick.jpg"].texture);
-				character.x = 60
-				character.y = 50
+				character.x = 60;
+				character.y = 50;
 				gameScene.addChild(character);
 				
 				bricks = new Sprite(resources["brick.jpg"].texture); 
 				bricks.position.set(200, 200);
+				app.stage.interactive = true;
 				gameScene.addChild(bricks);
 				
-				app.ticker.add(delta => gameLoop(delta));
 				
-				let left = keyboard(37),
-					up = keyboard(38),
-					right = keyboard(39),
-					down = keyboard(40);
+				
+				app.ticker.add(delta => gameLoop(delta));
 			}
 			
 			function gameLoop(delta)
 			{
 				//Move the cat 1 pixel 
-				character.x += 1;
+				/*character.x += 3;
 				
-				if (character.x > 520)
+				if (character.x > screen.width)
 				{
 					character.x = -200;
+				}*/
+				
+				//character.position.set(app.renderer.plugins.interaction.mouse.global.x, app.renderer.plugins.interaction.mouse.global.y);
+				
+				app.stage.on("click", function()
+				{
+					mousePos = new PIXI.Point(app.renderer.plugins.interaction.mouse.global.x, app.renderer.plugins.interaction.mouse.global.y);
+					playerPos = new PIXI.Point(character.position.x + 90, character.position.y + 420);
+					slide();
+					
+					//console.log(app.renderer.plugins.interaction.mouse.global);
+				});
+				
+				/*if (character.position.x != mousePos.x || character.position.y != mousePos.y)
+				{
+					
+				}*/
+				//90, 420
+				console.log(character.position);
+			}
+			
+			function slide()
+			{
+				let tmp = 0;
+				
+				
+				while (tmp < 6000)
+				{
+					character.position.x += (mousePos.x - playerPos.x) / 60;
+					character.position.y += (mousePos.y - playerPos.y) / 60;
+					tmp ++;
 				}
+				/*if (tmp <= 20)
+				{
+					character.position.x += (mousePos.x - playerPos.x) / 20;
+					character.position.y += (mousePos.y - playerPos.y) / 20;
+					tmp += 1;
+				}
+				else
+				{
+					app.ticker.stop(slide(delta));
+				}
+				
+				console.log(tmp);*/
+				
 			}
 		</script>
 	</body>  
