@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<title>New Game</title>
-		<script src="pixi/pixi.min.js"></script>
+		<script src="../pixi/pixi.min.js"></script>
 		
 	</head>
 	<body>
@@ -22,6 +22,7 @@
 				poly = new PIXI.Polygon(new PIXI.Point(0, 0), new PIXI.Point(1200, 600), new PIXI.Point(600, 900));
 				playerPos = new PIXI.Point(0,0);
 				mousePos = new PIXI.Point(0,0);
+				moveInt = 30;
 				//points = [new PIXI.point(0, 0), new PIXI.point(1200, 600), new PIXI.point(600, 900)]
 				//point = PIXI.point(0, 0);
 
@@ -40,7 +41,7 @@
 			document.body.appendChild(app.view);
 
 			loader
-			  .add("stick.jpg")
+			  .add("stick.png")
 			  .add("brick.jpg")
 			  .add("beach.jpg")
 			  .load(setup);
@@ -61,20 +62,20 @@
 				beach.height = 1000;
 				gameScene.addChild(beach);
 				
-				character = new Sprite(resources["stick.jpg"].texture);
+				character = new Sprite(resources["stick.png"].texture);
 				character.x = 60;
 				character.y = 50;
+				character.height = 400;
+				character.width = 300;
 				gameScene.addChild(character);
 				
 				bricks = new Sprite(resources["brick.jpg"].texture); 
 				bricks.position.set(200, 200);
 				app.stage.interactive = true;
 				gameScene.addChild(bricks);
-				
-				
-				
+					
 				app.ticker.add(delta => gameLoop(delta));
-			}
+				}
 			
 			function gameLoop(delta)
 			{
@@ -88,21 +89,27 @@
 				
 				//character.position.set(app.renderer.plugins.interaction.mouse.global.x, app.renderer.plugins.interaction.mouse.global.y);
 				
+				
 				app.stage.on("click", function()
 				{
 					mousePos = new PIXI.Point(app.renderer.plugins.interaction.mouse.global.x, app.renderer.plugins.interaction.mouse.global.y);
-					playerPos = new PIXI.Point(character.position.x + 90, character.position.y + 420);
-					slide();
-					
-					//console.log(app.renderer.plugins.interaction.mouse.global);
+					playerPos = new PIXI.Point(character.position.x + 150, character.position.y + 370);
+					moveInt = 0;
 				});
+				
+				if (moveInt != 30)
+				{
+					character.position.x += (mousePos.x - playerPos.x) / 30;
+					character.position.y += (mousePos.y - playerPos.y) / 30;
+					moveInt++;
+				}
 				
 				/*if (character.position.x != mousePos.x || character.position.y != mousePos.y)
 				{
 					
 				}*/
 				//90, 420
-				console.log(character.position);
+				//console.log(character.position);
 			}
 			
 			function slide()
@@ -129,6 +136,49 @@
 				
 				console.log(tmp);*/
 				
+			}
+			
+			function keyboard(keyCode) 
+			{
+				let key = {};
+				key.code = keyCode;
+				key.isDown = false;
+				key.isUp = true;
+				key.press = undefined;
+				key.release = undefined;
+
+				//The `downHandler`
+				key.downHandler = function(event) 
+				{
+					if (event.keyCode === key.code) 
+					{
+					    if (key.isUp && key.press) key.press();
+					    key.isDown = true;
+					    key.isUp = false;
+					}
+					event.preventDefault();
+				};
+
+				  //The `upHandler`
+				key.upHandler = function(event) 
+				{
+					if (event.keyCode === key.code) 
+					{
+					    if (key.isDown && key.release) key.release();
+					    key.isDown = false;
+					    key.isUp = true;
+					}
+					event.preventDefault();
+				};
+
+				  //Attach event listeners
+				window.addEventListener(
+					"keydown", key.downHandler.bind(key), false
+				);
+				window.addEventListener(
+					"keyup", key.upHandler.bind(key), false
+				);
+				return key;
 			}
 		</script>
 	</body>  
