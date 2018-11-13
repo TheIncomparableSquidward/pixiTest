@@ -30,11 +30,14 @@
 				TextureCache = PIXI.utils.TextureCache,
 				Sprite = PIXI.Sprite,
 				Text = PIXI.Text,
-				TextStyle = PIXI.TextStyle;
-				poly = new PIXI.Polygon(new PIXI.Point(0, 0), new PIXI.Point(1200, 600), new PIXI.Point(600, 900));
-				playerPos = new PIXI.Point(0,0);
-				mousePos = new PIXI.Point(0,0);
-				moveInt = 30;
+				TextStyle = PIXI.TextStyle,
+				poly = new PIXI.Polygon(new PIXI.Point(0, 0), new PIXI.Point(1200, 600), new PIXI.Point(600, 900)),
+				playerPos = new PIXI.Point(0,0),
+				mousePos = new PIXI.Point(0,0),
+				moveInt = 0,
+				moveTime = 0
+				moveAngle = 0,
+				thing = false;
 				//points = [new PIXI.point(0, 0), new PIXI.point(1200, 600), new PIXI.point(600, 900)]
 				//point = PIXI.point(0, 0);
 
@@ -107,15 +110,19 @@
 				{
 					mousePos = new PIXI.Point(app.renderer.plugins.interaction.mouse.global.x, app.renderer.plugins.interaction.mouse.global.y);
 					playerPos = new PIXI.Point(character.position.x + 150, character.position.y + 370);
+					moveAngle = angle(playerPos.x, playerPos.y, mousePos.x, mousePos.y);
+					moveTime = Math.floor(distance(playerPos.x, playerPos.y, mousePos.x, mousePos.y) / 5)
 					moveInt = 0;
 				});
 				
-				if (moveInt != 30)
+				if (moveInt != moveTime)
 				{
-					character.position.x += (mousePos.x - playerPos.x) / 30;
-					character.position.y += (mousePos.y - playerPos.y) / 30;
+					character.position.x += 5 * Math.cos(moveAngle);
+					character.position.y += 5 * Math.sin(moveAngle);
 					moveInt++;
 				}
+				
+				//console.log(Math.sin(30/57.2958));
 				
 				/*if (character.position.x != mousePos.x || character.position.y != mousePos.y)
 				{
@@ -149,6 +156,16 @@
 				
 				console.log(tmp);*/
 				
+			}
+			
+			function distance(xFrom, yFrom, xTo, yTo)
+			{
+				return Math.sqrt (Math.pow (xTo - xFrom, 2) + (Math.pow (yTo - yFrom, 2)));
+			}
+			
+			function angle(fromX, fromY, toX, toY)
+			{
+				return Math.acos ((toX - fromX) / distance(fromX, fromY, toX, toY)) * Math.sign(toY - fromY);
 			}
 			
 			function keyboard(keyCode) 
