@@ -81,10 +81,11 @@
 				character.width = 300;
 				gameScene.addChild(character);
 				
-				bricks = new Sprite(resources["brick.jpg"].texture); 
+				/*bricks = new Sprite(resources["brick.jpg"].texture); 
 				bricks.position.set(200, 200);
+				gameScene.addChild(bricks);*/
+				
 				app.stage.interactive = true;
-				gameScene.addChild(bricks);
 					
 				app.ticker.add(delta => gameLoop(delta));
 				}
