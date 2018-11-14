@@ -62,7 +62,7 @@
 			  .load(setup);
 			  
 			  
-			  let character, bricks, beach;
+			  let character, wall, beach;
 			function setup()
 			{
 				gameScene = new Container();
@@ -78,20 +78,24 @@
 				gameScene.addChild(beach);
 				
 				character = new Sprite(resources["stick.png"].texture);
-				character.x = 60;
-				character.y = 50;
-				character.height = 400;
-				character.width = 300;
+				
+				character.position.set(60, 50);
+				character.height = 120;
+				character.width = 90;
 				gameScene.addChild(character);
 				
-				/*bricks = new Sprite(resources["brick.jpg"].texture); 
-				bricks.position.set(200, 200);
-				gameScene.addChild(bricks);*/
+				wall = new Graphics();
+				wall.beginFill(0xCCFF99);
+				wall.drawRect(0, 0, 200, 200);
+				wall.endFill();
+				wall.position.set(1000, 200);
+				
+				gameScene.addChild(wall);
 				
 				app.stage.interactive = true;
 					
 				app.ticker.add(delta => gameLoop(delta));
-				}
+			}
 			
 			function gameLoop(delta)
 			{
@@ -109,7 +113,7 @@
 				app.stage.on("click", function()
 				{
 					mousePos = new PIXI.Point(app.renderer.plugins.interaction.mouse.global.x, app.renderer.plugins.interaction.mouse.global.y);
-					playerPos = new PIXI.Point(character.position.x + 150, character.position.y + 370);
+					playerPos = new PIXI.Point(character.position.x + 45, character.position.y + 100);
 					moveAngle = angle(playerPos.x, playerPos.y, mousePos.x, mousePos.y);
 					moveTime = Math.floor(distance(playerPos.x, playerPos.y, mousePos.x, mousePos.y) / 5)
 					moveInt = 0;
@@ -117,9 +121,19 @@
 				
 				if (moveInt != moveTime)
 				{
-					character.position.x += 5 * Math.cos(moveAngle);
-					character.position.y += 5 * Math.sin(moveAngle);
-					moveInt++;
+				
+					
+					
+					if (hitTestRectangle(character, wall, 5 * Math.sign(mousePos.x - playerPos.x), 5 * Math.sign(mousePos.y - playerPos.y)))
+					{
+						moveInt = moveTime;
+					}
+					else
+					{
+						character.position.x += 5 * Math.cos(moveAngle);
+						character.position.y += 5 * Math.sin(moveAngle);
+						moveInt++;
+					}
 				}
 				
 				//console.log(Math.sin(30/57.2958));
@@ -131,6 +145,64 @@
 				//90, 420
 				//console.log(character.position);
 			}
+			
+			function hitTestRectangle(r1, r2, modX, modY)
+			{
+
+			    //Define the variables we'll need to calculate
+			    let combinedHalfWidths, combinedHalfHeights, vx, vy;
+
+			    //hit will determine whether there's a collision
+			    //hit = false;
+				
+				//Find the half-widths and half-heights of each sprite
+			    r1.halfW = r1.width / 2;
+			    r1.halfH = r1.height / 2;
+			    r2.halfW = r2.width / 2;
+			    r2.halfH = r2.height / 2;
+				
+			    //Find the center points of each sprite
+			    r1.centerX = r1.x + modX + r1.halfW; 
+			    r1.centerY = r1.y + modY + r1.halfH; 
+			    r2.centerX = r2.x + r2.halfW; 
+			    r2.centerY = r2.y + r2.halfH; 
+ 
+			    
+
+			    //Calculate the distance vector between the sprites
+			    vx = r1.centerX - r2.centerX;
+			    vy = r1.centerY - r2.centerY;
+
+			    //Figure out the combined half-widths and half-heights
+			    combinedHalfWidths = r1.halfW + r2.halfW;
+			    combinedHalfHeights = r1.halfH + r2.halfH;
+
+			  /*Check for a collision on the x axis
+				if (Math.abs(vx) < combinedHalfWidths) 
+				{
+					//A collision might be occuring. Check for a collision on the y axis
+					if (Math.abs(vy) < combinedHalfHeights) 
+					{
+					  //There's definitely a collision happening
+					  hit = true;
+					} 
+					else 
+					{
+					  //There's no collision on the y axis
+					  hit = false;
+					}
+				} 
+				else 
+				{
+
+					//There's no collision on the x axis
+					hit = false;
+				}
+
+				  //`hit` will be either `true` or `false`
+				return hit;*/
+				return ((Math.abs(vx) < combinedHalfWidths) && (Math.abs(vy) < combinedHalfHeights));
+			};
 			
 			function slide()
 			{
