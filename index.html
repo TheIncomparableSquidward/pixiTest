@@ -79,7 +79,7 @@
 				
 				character = new Sprite(resources["stick.png"].texture);
 				
-				character.position.set(60, 50);
+				character.position.set(825, 500);
 				character.height = 120;
 				character.width = 90;
 				gameScene.addChild(character);
@@ -98,18 +98,7 @@
 			}
 			
 			function gameLoop(delta)
-			{
-				//Move the cat 1 pixel 
-				/*character.x += 3;
-				
-				if (character.x > screen.width)
-				{
-					character.x = -200;
-				}*/
-				
-				//character.position.set(app.renderer.plugins.interaction.mouse.global.x, app.renderer.plugins.interaction.mouse.global.y);
-				
-				
+			{	
 				app.stage.on("click", function()
 				{
 					mousePos = new PIXI.Point(app.renderer.plugins.interaction.mouse.global.x, app.renderer.plugins.interaction.mouse.global.y);
@@ -121,9 +110,6 @@
 				
 				if (moveInt != moveTime)
 				{
-				
-					
-					
 					if (hitTestRectangle(character, wall, 5 * Math.sign(mousePos.x - playerPos.x), 5 * Math.sign(mousePos.y - playerPos.y)))
 					{
 						moveInt = moveTime;
@@ -135,116 +121,111 @@
 						moveInt++;
 					}
 				}
-				
-				//console.log(Math.sin(30/57.2958));
-				
-				/*if (character.position.x != mousePos.x || character.position.y != mousePos.y)
-				{
-					
-				}*/
-				//90, 420
-				//console.log(character.position);
 			}
 			
 			function hitTestRectangle(r1, r2, modX, modY)
 			{
-
-			    //Define the variables we'll need to calculate
-			    let combinedHalfWidths, combinedHalfHeights, vx, vy;
-
-			    //hit will determine whether there's a collision
-			    //hit = false;
+				//Returns false if the center points of both objects are closer than half 
+				//the sum of their widths and heights on the x and y axes (respectively) with a modifier.
+					//Modifier added to allow players to move away from obstacles (would normally get stuck).
 				
-				//Find the half-widths and half-heights of each sprite
+				return ((Math.abs(r1.x - r2.x + (r1.width - r2.width) / 2 + modX) < (r1.width + r2.width) / 2) && (Math.abs(r1.y - r2.y  + (r1.height - r2.height) / 2 + modY) < (r1.height + r2.height) / 2));
+			    
+				/*ELABORATED VERSION       (if uncommented, should work just as well)
+				
+			    let combinedHalfWidths, combinedHalfHeights, vx, vy;
+			    
+			    hit = false;                                 //hit will determine whether there's a collision
+				
 			    r1.halfW = r1.width / 2;
 			    r1.halfH = r1.height / 2;
-			    r2.halfW = r2.width / 2;
+			    r2.halfW = r2.width / 2;                     //Find the half-widths and half-heights of each sprite
 			    r2.halfH = r2.height / 2;
 				
-			    //Find the center points of each sprite
 			    r1.centerX = r1.x + modX + r1.halfW; 
-			    r1.centerY = r1.y + modY + r1.halfH; 
+			    r1.centerY = r1.y + modY + r1.halfH;         //Find the center points of each sprite
 			    r2.centerX = r2.x + r2.halfW; 
 			    r2.centerY = r2.y + r2.halfH; 
- 
 			    
-
-			    //Calculate the distance vector between the sprites
-			    vx = r1.centerX - r2.centerX;
+			    vx = r1.centerX - r2.centerX;                //Calculate the distance vector between the sprites
 			    vy = r1.centerY - r2.centerY;
 
-			    //Figure out the combined half-widths and half-heights
-			    combinedHalfWidths = r1.halfW + r2.halfW;
+			    
+			    combinedHalfWidths = r1.halfW + r2.halfW;    //Figure out the combined half-widths and half-heights
 			    combinedHalfHeights = r1.halfH + r2.halfH;
-
-			  /*Check for a collision on the x axis
+			  
 				if (Math.abs(vx) < combinedHalfWidths) 
 				{
-					//A collision might be occuring. Check for a collision on the y axis
 					if (Math.abs(vy) < combinedHalfHeights) 
 					{
-					  //There's definitely a collision happening
-					  hit = true;
+					  hit = true;                            //x or y colliding
 					} 
 					else 
 					{
-					  //There's no collision on the y axis
-					  hit = false;
+					  hit = false;                           //no y collide
 					}
 				} 
 				else 
 				{
-
-					//There's no collision on the x axis
-					hit = false;
+					hit = false;                             //no x collide
 				}
 
-				  //`hit` will be either `true` or `false`
 				return hit;*/
-				return ((Math.abs(vx) < combinedHalfWidths) && (Math.abs(vy) < combinedHalfHeights));
-			};
-			
-			function slide()
-			{
-				let tmp = 0;
-				
-				
-				while (tmp < 60)
-				{
-					character.position.x += (mousePos.x - playerPos.x) / 60;
-					character.position.y += (mousePos.y - playerPos.y) / 60;
-					tmp ++;
-				}
-				/*if (tmp <= 20)
-				{
-					character.position.x += (mousePos.x - playerPos.x) / 20;
-					character.position.y += (mousePos.y - playerPos.y) / 20;
-					tmp += 1;
-				}
-				else
-				{
-					app.ticker.stop(slide(delta));
-				}
-				
-				console.log(tmp);*/
-				
 			}
+			
 			
 			function distance(xFrom, yFrom, xTo, yTo)
 			{
+				//Uses Pythagorean Theorem to determine the shortest possible distance between 2 points
+				
 				return Math.sqrt (Math.pow (xTo - xFrom, 2) + (Math.pow (yTo - yFrom, 2)));
+				
+				/*ELABORATED VERSION       (if uncommented, should work just as well)
+				
+				let a, b, c;            //(a squared + b squared = c squared
+				
+				a = xTo - xFrom;        //set a to the raw x distance
+				a = a * a;              //square it
+				
+				b = yTo - xFrom;        //set it to the raw y distance
+				b = b * b;              //square it
+				
+				c = a + b;              //add a and b
+				c = Math.sqrt(c);       //find the square root
+				
+				return c;*/
 			}
 			
 			function angle(fromX, fromY, toX, toY)
 			{
+				//Finds the angle between 2 points (returns in degrees)
+				
 				return Math.acos ((toX - fromX) / distance(fromX, fromY, toX, toY)) * Math.sign(toY - fromY);
+				
+				/*ELABORATED VERSION       (if uncommented, should work just as well)
+				
+				let xDist, yDist, hyp, frac, ang;      //cosine is opposite / hypotenuse
+				
+				xDist = toX - fromX;
+				yDist = toY - fromY;                   //find the x and y distances between the points
+				
+				hyp = distance(fromX, fromY, toX, toY) //uses above function to find the length of the hypotenuse
+				
+				frac = xDist / hyp;                    //divide the horizonral leg by the hypotenuse to get the ratio between them
+				
+				ang = Math.acos(frac);                 //find the angle by using the inverse cosine trig function on the leg-to-hypotnuse ratio
+				
+				ang = ang * Math.sign(yDist);          //set the angle to positive or negative based on whether this is pointing up or down
+				
+				
+				return ang;*/
 			}
 			
 			function keyboard(keyCode) 
 			{
-				let key = {};
-				key.code = keyCode;
-				key.isDown = false;
+				let key = {};               //creates an empty object called "key"
+				key.code = keyCode;         //
+				key.isDown = false;         //
 				key.isUp = true;
 				key.press = undefined;
 				key.release = undefined;
