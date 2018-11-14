@@ -77,20 +77,19 @@
 				beach.height = 1000;
 				gameScene.addChild(beach);
 				
-				character = new Sprite(resources["stick.png"].texture);
-				
-				character.position.set(825, 500);
-				character.height = 120;
-				character.width = 90;
-				gameScene.addChild(character);
-				
 				wall = new Graphics();
 				wall.beginFill(0xCCFF99);
 				wall.drawRect(0, 0, 200, 200);
 				wall.endFill();
 				wall.position.set(1000, 200);
-				
 				gameScene.addChild(wall);
+				
+				
+				character = new Sprite(resources["stick.png"].texture);
+				character.position.set(825, 500);
+				character.height = 120;
+				character.width = 90;
+				gameScene.addChild(character);
 				
 				app.stage.interactive = true;
 					
@@ -204,7 +203,7 @@
 				
 				/*ELABORATED VERSION       (if uncommented, should work just as well)
 				
-				let xDist, yDist, hyp, frac, ang;      //cosine is opposite / hypotenuse
+				let xDist, yDist, hyp, frac, angl;      //cosine is opposite / hypotenuse
 				
 				xDist = toX - fromX;
 				yDist = toY - fromY;                   //find the x and y distances between the points
@@ -213,9 +212,9 @@
 				
 				frac = xDist / hyp;                    //divide the horizonral leg by the hypotenuse to get the ratio between them
 				
-				ang = Math.acos(frac);                 //find the angle by using the inverse cosine trig function on the leg-to-hypotnuse ratio
+				angl = Math.acos(frac);                 //find the angle by using the inverse cosine trig function on the leg-to-hypotnuse ratio
 				
-				ang = ang * Math.sign(yDist);          //set the angle to positive or negative based on whether this is pointing up or down
+				angl = angl * Math.sign(yDist);          //set the angle to positive or negative based on whether this is pointing up or down
 				
 				
 				return ang;*/
