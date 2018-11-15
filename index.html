@@ -44,8 +44,8 @@
 			//Create a Pixi Application
 			let app = new Application(
 			{ 
-				width: 1650, 
-				height: 900,                       
+				width: 1727, 
+				height: 1080,                       
 				antialiasing: true, 
 				transparent: false, 
 				resolution: 1
@@ -227,7 +227,7 @@
 			{
 				let key = {};               //creates an empty object called "key"
 				key.code = keyCode;         //sets its code to the argument
-				key.isDown = false;         //
+				key.isDown = false;         //used to determine current state
 				key.press = undefined;      //
 				key.release = undefined;    //
 
@@ -236,7 +236,7 @@
 				{
 					if (event.keyCode === key.code) 
 					{
-					    if (!key.isUp && key.press) 
+					    if (!key.isDown && key.press) 
 						{
 							key.press();
 						}
