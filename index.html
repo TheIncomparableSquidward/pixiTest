@@ -73,8 +73,8 @@
 				
 				beach = new Sprite(resources["beach.jpg"].texture);
 				beach.position.set(0, 0);
-				beach.width = 1650;
-				beach.height = 1000;
+				beach.width = 1727;
+				beach.height = 1080;
 				gameScene.addChild(beach);
 				
 				wall = new Graphics();
@@ -120,6 +120,9 @@
 						moveInt++;
 					}
 				}
+				
+				//console.log(event.key);
+				//console.log(event.keyCode);
 			}
 			
 			function hitTestRectangle(r1, r2, modX, modY)
@@ -130,7 +133,7 @@
 				
 				return ((Math.abs(r1.x - r2.x + (r1.width - r2.width) / 2 + modX) < (r1.width + r2.width) / 2) && (Math.abs(r1.y - r2.y  + (r1.height - r2.height) / 2 + modY) < (r1.height + r2.height) / 2));
 			    
-				/*ELABORATED VERSION       (if uncommented, should work just as well)
+				/*//ELABORATED VERSION       (if uncommented, should work just as well)
 				
 			    let combinedHalfWidths, combinedHalfHeights, vx, vy;
 			    
@@ -179,7 +182,7 @@
 				
 				return Math.sqrt (Math.pow (xTo - xFrom, 2) + (Math.pow (yTo - yFrom, 2)));
 				
-				/*ELABORATED VERSION       (if uncommented, should work just as well)
+				/*//ELABORATED VERSION       (if uncommented, should work just as well)
 				
 				let a, b, c;            //(a squared + b squared = c squared
 				
@@ -201,9 +204,9 @@
 				
 				return Math.acos ((toX - fromX) / distance(fromX, fromY, toX, toY)) * Math.sign(toY - fromY);
 				
-				/*ELABORATED VERSION       (if uncommented, should work just as well)
+				/*//ELABORATED VERSION       (if uncommented, should work just as well)
 				
-				let xDist, yDist, hyp, frac, angl;      //cosine is opposite / hypotenuse
+				let xDist, yDist, hyp, frac, angl;     //cosine is opposite / hypotenuse
 				
 				xDist = toX - fromX;
 				yDist = toY - fromY;                   //find the x and y distances between the points
@@ -212,9 +215,9 @@
 				
 				frac = xDist / hyp;                    //divide the horizonral leg by the hypotenuse to get the ratio between them
 				
-				angl = Math.acos(frac);                 //find the angle by using the inverse cosine trig function on the leg-to-hypotnuse ratio
+				angl = Math.acos(frac);                //find the angle by using the inverse cosine trig function on the leg-to-hypotnuse ratio
 				
-				angl = angl * Math.sign(yDist);          //set the angle to positive or negative based on whether this is pointing up or down
+				angl = angl * Math.sign(yDist);        //set the angle to positive or negative based on whether this is pointing up or down
 				
 				
 				return ang;*/
@@ -223,20 +226,21 @@
 			function keyboard(keyCode) 
 			{
 				let key = {};               //creates an empty object called "key"
-				key.code = keyCode;         //
+				key.code = keyCode;         //sets its code to the argument
 				key.isDown = false;         //
-				key.isUp = true;
-				key.press = undefined;
-				key.release = undefined;
+				key.press = undefined;      //
+				key.release = undefined;    //
 
 				//The `downHandler`
 				key.downHandler = function(event) 
 				{
 					if (event.keyCode === key.code) 
 					{
-					    if (key.isUp && key.press) key.press();
+					    if (!key.isUp && key.press) 
+						{
+							key.press();
+						}
 					    key.isDown = true;
-					    key.isUp = false;
 					}
 					event.preventDefault();
 				};
@@ -246,20 +250,20 @@
 				{
 					if (event.keyCode === key.code) 
 					{
-					    if (key.isDown && key.release) key.release();
+					    if (key.isDown && key.release)
+						{
+							key.release();
+						}
 					    key.isDown = false;
-					    key.isUp = true;
 					}
 					event.preventDefault();
 				};
 
 				  //Attach event listeners
-				window.addEventListener(
-					"keydown", key.downHandler.bind(key), false
-				);
-				window.addEventListener(
-					"keyup", key.upHandler.bind(key), false
-				);
+				window.addEventListener("keydown", key.downHandler.bind(key), false);
+				
+				window.addEventListener("keyup", key.upHandler.bind(key), false);
+				
 				return key;
 			}
 		</script>
