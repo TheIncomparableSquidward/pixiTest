@@ -17,6 +17,7 @@
 				height: auto;
 			}
 		</style>
+		<script src="https://cdn.rawgit.com/deepstreamIO/deepstream.io-client-js/master/dist/deepstream.min.js"></script>
 	</head>
 	<body>
 		<script>
@@ -49,27 +50,25 @@
 				antialiasing: true, 
 				transparent: false, 
 				resolution: 1
-			}
-			);
+			});
 
-			//Add the canvas that Pixi automatically created for you to the HTML document
-			document.body.appendChild(app.view);
+			document.body.appendChild(app.view);    //Add the canvas that Pixi automatically created for you to the HTML document
 
 			loader
-			  .add("stick.png")
-			  .add("brick.jpg")
+			  .add("stick.png")          
+			  .add("brick.jpg")                     //load these images into the game in advance for future use
 			  .add("beach.jpg")
 			  .load(setup);
 			  
 			  
-			  let character, wall, beach;
+			  
 			function setup()
 			{
+				let character, wall, beach;
+				
 				gameScene = new Container();
 				app.stage.addChild(gameScene);
-				app.renderer.backgroundColor = 0x000000;
-				//Make the sprites and add them to the `gameScene`
-				//Create an alias for the texture atlas frame ids
+				//app.renderer.backgroundColor = 0x000000;
 				
 				beach = new Sprite(resources["beach.jpg"].texture);
 				beach.position.set(0, 0);
@@ -228,24 +227,22 @@
 				let key = {};               //creates an empty object called "key"
 				key.code = keyCode;         //sets its code to the argument
 				key.isDown = false;         //used to determine current state
-				key.press = undefined;      //
-				key.release = undefined;    //
-
-				//The `downHandler`
-				key.downHandler = function(event) 
-				{
-					if (event.keyCode === key.code) 
+				key.press = undefined;      //function called once when button is pressed (gets defined based on the key you bind it to)
+				key.release = undefined;    //same but when released
+				
+				key.downHandler = function(event) //both this and upHandler called when any button is pressed to determine if the pressed
+				{                                 //button was this one and if so if it was pressed or released
+					if (event.keyCode === key.code)   //does the index number of the input delivered match the value of the number passed?
 					{
-					    if (!key.isDown && key.press) 
+					    if (!key.isDown && key.press) //last we checked, was it up, and was it just pressed?
 						{
-							key.press();
+							key.press();              //do whatever that button does
 						}
-					    key.isDown = true;
+					    key.isDown = true;            //note that the key is now down
 					}
-					event.preventDefault();
+					event.preventDefault();           //dont do whatever that key would normally do
 				};
 
-				  //The `upHandler`
 				key.upHandler = function(event) 
 				{
 					if (event.keyCode === key.code) 
@@ -259,12 +256,11 @@
 					event.preventDefault();
 				};
 
-				  //Attach event listeners
-				window.addEventListener("keydown", key.downHandler.bind(key), false);
+				window.addEventListener("keydown", key.downHandler.bind(key), false);  //make the computer watch for this key to be pressed down
 				
-				window.addEventListener("keyup", key.upHandler.bind(key), false);
+				window.addEventListener("keyup", key.upHandler.bind(key), false);      //same but relseased
 				
-				return key;
+				return key;   //give a variable the value of all this
 			}
 		</script>
 	</body>  
