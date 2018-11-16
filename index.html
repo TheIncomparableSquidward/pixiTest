@@ -60,12 +60,10 @@
 			  .add("beach.jpg")
 			  .load(setup);
 			  
-			  
+			  let character, wall, beach;
 			  
 			function setup()
 			{
-				let character, wall, beach;
-				
 				gameScene = new Container();
 				app.stage.addChild(gameScene);
 				//app.renderer.backgroundColor = 0x000000;
@@ -222,7 +220,7 @@
 				return ang;*/
 			}
 			
-			function keyboard(keyCode) 
+			/*function keyboard(keyCode) 
 			{
 				let key = {};               //creates an empty object called "key"
 				key.code = keyCode;         //sets its code to the argument
@@ -261,7 +259,7 @@
 				window.addEventListener("keyup", key.upHandler.bind(key), false);      //same but relseased
 				
 				return key;   //give a variable the value of all this
-			}
+			}*/
 		</script>
 	</body>  
 </html>
