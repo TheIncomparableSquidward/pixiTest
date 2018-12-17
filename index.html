@@ -68,19 +68,18 @@
 				app.stage.addChild(gameScene);
 				//app.renderer.backgroundColor = 0x000000;
 				
-				background = new Sprite(resources["background.png"].texture);
-				background.position.set(0, 0);
-				background.width = 1727;
-				background.height = 1080;
-				gameScene.addChild(background);
-				
 				wall = new Graphics();
 				wall.beginFill(0xCCFF99);
 				wall.drawRect(0, 0, 200, 200);
 				wall.endFill();
-				wall.position.set(1000, 200);
+				wall.position.set(1100, 130);
 				gameScene.addChild(wall);
 				
+				background = new Sprite(resources["background.png"].texture);
+				background.position.set(0, 0);
+				background.width = 1727;
+				background.height = 1080;
+				gameScene.addChild(background);				
 				
 				character = new Sprite(resources["stick.png"].texture);
 				character.position.set(825, 500);
