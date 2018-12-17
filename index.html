@@ -57,10 +57,10 @@
 			loader
 			  .add("stick.png")          
 			  .add("brick.jpg")                     //load these images into the game in advance for future use
-			  .add("beach.jpg")
+			  .add("background.png")
 			  .load(setup);
 			  
-			  let character, wall, beach;
+			  let character, wall, background;
 			  
 			function setup()
 			{
@@ -68,11 +68,11 @@
 				app.stage.addChild(gameScene);
 				//app.renderer.backgroundColor = 0x000000;
 				
-				beach = new Sprite(resources["beach.jpg"].texture);
-				beach.position.set(0, 0);
-				beach.width = 1727;
-				beach.height = 1080;
-				gameScene.addChild(beach);
+				background = new Sprite(resources["background.png"].texture);
+				background.position.set(0, 0);
+				background.width = 1727;
+				background.height = 1080;
+				gameScene.addChild(background);
 				
 				wall = new Graphics();
 				wall.beginFill(0xCCFF99);
